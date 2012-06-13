@@ -1,0 +1,21 @@
+﻿canvas#grid
+{
+    outline: 1px solid #000;
+    position: absolute;
+    top: 10;
+    left:10px;
+    bottom: 10;
+    width: 500px;
+    height: 500px;
+}
+
+canvas#snake
+{
+    background-color: #AACC99;
+    position: absolute;
+    top: 10;
+    left:10px;
+    bottom: 10;
+    width: 500px;
+    height: 500px;
+}
