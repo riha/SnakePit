@@ -1,11 +1,11 @@
 ﻿var Snake = function (startPoint, context, grid) {
     var self = this;
-    
+
     self.position = currentHeadPoint = startPoint;
 
     //Parts array contains all x, y positions for each part.
     //Initiates with the starting position of the snake head. 
-    self.parts = parts = [startPoint];
+    var parts = [startPoint];
 
     //Sets the initial parts and initial length of the snake.
     setParts(14);
@@ -27,6 +27,15 @@
     self.grow = function () {
         setParts(1);
     }
+
+    self.parts = function () {
+        var relativeParts = [];
+        for (var i = 0; i < parts.length; i++) {
+            relativeParts.push(grid.getGridPosition(parts[i]));
+        }
+
+        return relativeParts;
+    };
 
     function shouldDraw(lastRun) {
         if (lastDraw === undefined)
@@ -75,35 +84,35 @@
         return false;
     };
 
-//    self.checkSelfCollision = function () {
-//        //We start on the third parts as the head can't collide with the first two parts
-//        for (var i = 3; i < parts.length - 1; i++) {
-//            var partPosition = parts[i];
-//            if (grid.getGridPosition(partPosition).equal(grid.getGridPosition(self.position))) {
-//                //console.log("crash");
-//                return true;
-//                break;
-//            };
-//        };
-//        return false;
-//    };
+    //    self.checkSelfCollision = function () {
+    //        //We start on the third parts as the head can't collide with the first two parts
+    //        for (var i = 3; i < parts.length - 1; i++) {
+    //            var partPosition = parts[i];
+    //            if (grid.getGridPosition(partPosition).equal(grid.getGridPosition(self.position))) {
+    //                //console.log("crash");
+    //                return true;
+    //                break;
+    //            };
+    //        };
+    //        return false;
+    //    };
 
-//    self.checkBorderCollision = function () {
-//        var relativePosition = grid.getGridPosition(self.position);
-//        if (relativePosition.x >= grid.maxWidth
-//                || relativePosition.y >= grid.maxHeight
-//                || relativePosition.y < 0
-//                || relativePosition.x < 0)
-//            return true;
+    //    self.checkBorderCollision = function () {
+    //        var relativePosition = grid.getGridPosition(self.position);
+    //        if (relativePosition.x >= grid.maxWidth
+    //                || relativePosition.y >= grid.maxHeight
+    //                || relativePosition.y < 0
+    //                || relativePosition.x < 0)
+    //            return true;
 
-//        return false;
-//    };
+    //        return false;
+    //    };
 
-//    self.checkFoodCollision = function (food) {
-//        if (grid.getGridPosition(food.position).equal(grid.getGridPosition(self.position)))
-//            return true;
+    //    self.checkFoodCollision = function (food) {
+    //        if (grid.getGridPosition(food.position).equal(grid.getGridPosition(self.position)))
+    //            return true;
 
-//        return false;
-//    };
+    //        return false;
+    //    };
 
 };

@@ -4,17 +4,22 @@
 @section Script {
     <script type="text/javascript">
         var hub;
+        var request;
+        var snake1;
+        var direction = Directions.Right;
 
         $(function () {
             hub = $.connection.gameHub;
             console.log(hub);
 
-            hub.crash = function () {
+            hub.borderCollision = function () {
                 console.log("Moved left and crashed");
+                gameOver();
             };
 
             hub.ok = function () {
                 console.log("Moved ok");
+                ok();
             };
 
             $.connection.hub.start(function () {
@@ -24,15 +29,25 @@
 
         });
 
+        function gameOver() {
+            //console.log(request);
+            cancelRequestAnimFrame(request);
+        };
+
+        function ok() {
+            //console.log(request);
+            request = requestAnimFrame(gameLoop);
+        };
+
         function init() {
-            var direction = Directions.Right;
+            
             var lastDirection;
 
-//            document.onkeydown = function (evt) {
-//                evt = evt || window.event;
-//                console.log(evt.keyCode);
-//                hub.move(evt.keyCode);
-//            };
+            //            document.onkeydown = function (evt) {
+            //                evt = evt || window.event;
+            //                console.log(evt.keyCode);
+            //                hub.move(evt.keyCode);
+            //            };
 
             document.onkeydown = function (event) {
                 if (event.keyCode == 37 && lastDirection != Directions.Right)
@@ -53,34 +68,37 @@
 
             var grid = new Grid(gridContext);
 
-            var snake1 = new Snake(new Point(100, 40), snakeContext, grid);
+            snake1 = new Snake(new Point(100, 40), snakeContext, grid);
 
-            (function gameLoop() {
-                lastRun = Date.now();
-
-                //TODO: Start by calculating new position, then do all test - if everythings ok draw the new position
-                if (snake1.draw(direction, lastRun)) {
-                    lastDirection = direction;
-                    //Här måste vi skicka hela arrayen med positioner till servern. Den skall då kontrollera eventuella kollisioner
-
-//                    if (snake1.checkSelfCollision() || snake1.checkBorderCollision()) {
-//                        gameOver();
-//                    } else {
-//                        if (snake1.checkFoodCollision(food)) {
-//                            snake1.grow();
-//                            //food.clear();
-//                            food = new Food(foodContext, snake1);
-//                        }
-
-                        request = requestAnimFrame(gameLoop);
-                    //}
-                } else {
-                    request = requestAnimFrame(gameLoop);
-                }
-            })();
-
-
+            gameLoop();
         }
+
+
+        function gameLoop() {
+            lastRun = Date.now();
+
+            //TODO: Start by calculating new position, then do all test - if everythings ok draw the new position
+            if (snake1.draw(direction, lastRun)) {
+                lastDirection = direction;
+                hub.validateMove(snake1.parts());
+                //Här måste vi skicka hela arrayen med positioner till servern. Den skall då kontrollera eventuella kollisioner
+
+                //                    if (snake1.checkSelfCollision() || snake1.checkBorderCollision()) {
+                //                        gameOver();
+                //                    } else {
+                //                        if (snake1.checkFoodCollision(food)) {
+                //                            snake1.grow();
+                //                            //food.clear();
+                //                            food = new Food(foodContext, snake1);
+                //                        }
+
+
+                //}
+            } else {
+                request = requestAnimFrame(gameLoop);
+            }
+        };
+
     </script>
 }
 <h2>

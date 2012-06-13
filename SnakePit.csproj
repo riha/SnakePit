@@ -76,7 +76,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Controllers\HomeController.cs" />
-    <Compile Include="Game\Server\Direction.cs" />
+    <Compile Include="Game\Server\Point.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
@@ -84,6 +84,13 @@
     <Compile Include="Game\Server\GameHub.cs" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Css\Main.css" />
+    <Content Include="Game\Client\Directions.js" />
+    <Content Include="Game\Client\Grid.js" />
+    <Content Include="Game\Client\Point.js" />
+    <Content Include="Game\Client\RoundRect.js" />
+    <Content Include="Game\Client\Shared.js" />
+    <Content Include="Game\Client\Snake.js" />
     <Content Include="Global.asax" />
     <Content Include="Scripts\jquery-1.6.4-vsdoc.js" />
     <Content Include="Scripts\jquery-1.6.4.js" />
@@ -103,7 +110,6 @@
     <Content Include="Views\Shared\_Layout.cshtml" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Game\Client\" />
     <Folder Include="Models\" />
   </ItemGroup>
   <ItemGroup>
