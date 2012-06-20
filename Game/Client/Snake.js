@@ -58,6 +58,7 @@
             context.shadowOffsetX = 2;
             context.shadowOffsetY = 2;
             context.shadowColor = 'rgba(0, 0, 0, 0.2)';
+            
             //Loop the array from last part to first (first being the head). For each position we give it one "in front of it". 
             //The first one in the array (the head) we'll give the new caluclated position
             for (var i = parts.length - 1; i >= 0; i--) {

@@ -7,15 +7,22 @@
         var request;
         var snake1;
         var direction = Directions.Right;
+        var lastDirection;
 
         $(function () {
             hub = $.connection.gameHub;
             console.log(hub);
 
             hub.borderCollision = function () {
-                console.log("Moved left and crashed");
+                console.log("Crashed with border");
                 gameOver();
             };
+
+            hub.selfCollision = function () {
+                console.log("Collision with part");
+                gameOver();
+            };
+
 
             hub.ok = function () {
                 console.log("Moved ok");
@@ -41,8 +48,6 @@
 
         function init() {
             
-            var lastDirection;
-
             //            document.onkeydown = function (evt) {
             //                evt = evt || window.event;
             //                console.log(evt.keyCode);
@@ -50,6 +55,7 @@
             //            };
 
             document.onkeydown = function (event) {
+                console.log(lastDirection)
                 if (event.keyCode == 37 && lastDirection != Directions.Right)
                     direction = Directions.Left;
                 else if (event.keyCode == 38 && lastDirection != Directions.Down) {
