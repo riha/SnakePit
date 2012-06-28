@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using SignalR.Hubs;
@@ -16,15 +17,28 @@ namespace SnakePit.Game.Server
             return Groups.Add(Context.ConnectionId, "foo");
         }
 
-        public Task ValidateMove(Point[] parts)
+        public bool ValidateMove(Point[] parts)
         {
             if (IsBorderCollision(parts[0]))
-                return Clients["foo"].borderCollision();
+            {
+                Clients["foo"].borderCollision();
+                return false;
+            }
 
             if (IsSelfCollision(parts))
-                return Clients["foo"].selfCollision();
+            {
+                Clients["foo"].selfCollision();
+                return false;
+            }
 
-            return Clients["foo"].ok();
+            return true;
+        }
+
+        public Task CheckFoodCollision(Point part)
+        {
+            return FoodStore.test["foo"] == part
+                ? Clients["foo"].foodCollision()
+                : Clients["foo"].noFood();
         }
 
         private bool IsBorderCollision(Point headPosition)
@@ -32,15 +46,27 @@ namespace SnakePit.Game.Server
             return headPosition.X >= maxWidth
                    || headPosition.Y >= maxHeight
                    || headPosition.Y < 0
-                   || headPosition.X < 0
-                   ;
+                   || headPosition.X < 0;
         }
 
-        private bool IsSelfCollision(Point[] parts)
+        private static bool IsSelfCollision(IList<Point> parts)
         {
             var headPosition = parts[0];
 
             return parts.Skip(1).Any(point => point.X == headPosition.X && point.Y == headPosition.Y);
+        }
+
+        public Task CalculateFoodPosition()
+        {
+            //TODO: Måste kontrollera att den inte skapas i ormen!
+            var r = new Random((int)DateTime.Now.Ticks);
+            var x = r.Next(0, 25);
+            var y = r.Next(0, 25);
+            var point = new Point(x, y);
+            //foods.Add("foo", point);
+            FoodStore.AddFood("foo", point);
+            return Clients["foo"].foodPosition(point);
+            //return null; // new Point((x * 490 / 20 * 20), (y * 490 / 20 * 20));
         }
 
         //    self.checkSelfCollision = function () {
