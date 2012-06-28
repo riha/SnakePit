@@ -7,15 +7,16 @@
 
     var position = position;
 
-    //    function clear() {
-    //        if (self.position != undefined) {
-    //            console.log("clear;");
-    //            context.save();
-    //            context.translate(self.position.x + thickness, self.position.y + thickness);
-    //            context.clearRect(-9, -9, thickness * 2 + 3, thickness * 2 + 3);
-    //            context.restore();
-    //        };
-    //    };
+    function clear() {
+        //if (self.position != undefined) {
+        console.log("clear;");
+        context.save();
+        context.clearRect(0, 0, 500, 500);
+        //context.translate(self.position.x + thickness, self.position.y + thickness);
+        //context.clearRect(-9, -9, thickness * 2 + 3, thickness * 2 + 3);
+        context.restore();
+        //};
+    };
 
     //    function spin() {
     //        console.log("enter spin", lastDraw)
@@ -34,10 +35,9 @@
     function draw(rotation) {
         if (rotation == undefined)
             rotation = 0;
-        console.log("draw");
 
         context.save();
-        context.translate(position.toFixed().x + thickness, position.toFixed().y + thickness);
+        context.translate(position.toFixed().x + thickness + 3, position.toFixed().y + thickness + 1);
         //context.rotate(rotation);
         context.fillStyle = "#000";
 
@@ -68,7 +68,7 @@
     //        return position;
     //    };
 
-    // clear();
+    clear();
 
     //    do {
     //        self.position = calculatePosition();

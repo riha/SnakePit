@@ -29,27 +29,21 @@
                 gameOver();
             };
 
-            //            //TODO måste all ha denna!?
-            //            hub.validMove = function () {
-            //                console.log("Moved ok");
-            //                hub.checkFoodCollision(snake1.headPart());
+
+            //            hub.noFood = function () {
+            //                //console.log("Moved ok");
+            //                gameContinue();
             //            };
 
-//            hub.noFood = function () {
-//                //console.log("Moved ok");
-//                gameContinue();
+//            hub.foodPosition = function (position) {
+//                
 //            };
 
-            hub.foodPosition = function (position) {
-                //console.log(request);
-                console.log("new food!", position);
-                food = new Food(foodContext, new Point(position.X, position.Y));
-            };
-
-            hub.foodCollision = function () {
-                console.log("Food collision!");
-                hub.calculateFoodPosition();
-                gameOver();
+            hub.generateNewFood = function (position) {
+                var point = new Point(position.X, position.Y)
+                console.log("Food consumed!");
+                console.log("Generating food at x:", point.x, " y:", point.y);
+                food = new Food(foodContext, point);
             };
 
             $.connection.hub.start(function () {
@@ -70,15 +64,13 @@
         };
 
         function init() {
+            var grid = new Grid(gridContext);
 
-            //            document.onkeydown = function (evt) {
-            //                evt = evt || window.event;
-            //                console.log(evt.keyCode);
-            //                hub.move(evt.keyCode);
-            //            };
+            snake1 = new Snake(new Point(2, 2), snakeContext, grid);
+            
+            hub.setup(snake1.parts);
 
             document.onkeydown = function (event) {
-                console.log(lastDirection)
                 if (event.keyCode == 37 && lastDirection != Directions.Right)
                     direction = Directions.Left;
                 else if (event.keyCode == 38 && lastDirection != Directions.Down) {
@@ -92,12 +84,6 @@
                 };
             };
 
-            var grid = new Grid(gridContext);
-
-            snake1 = new Snake(new Point(2, 2), snakeContext, grid);
-
-            hub.calculateFoodPosition();
-
             gameLoop();
         }
 
@@ -108,10 +94,11 @@
             if (snake1.draw(direction, lastRun)) {
                 lastDirection = direction;
 
-                hub.validateMove(snake1.parts()).done(function (isValidMove) {
-                    console.log(isValidMove)
-                    if (isValidMove)
+                hub.validateMove(snake1.parts).done(function (isValidMove) {
+                    if (isValidMove) {
+                        hub.checkFoodCollision(snake1.parts);
                         request = requestAnimFrame(gameLoop);
+                    };
                 });
 
                 //Här måste vi skicka hela arrayen med positioner till servern. Den skall då kontrollera eventuella kollisioner

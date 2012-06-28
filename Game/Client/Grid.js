@@ -32,17 +32,4 @@
         }
         context.restore();
     }
-
-    console.log("Klar grid");
-
-    //Will return a grid relative position to make collision detection easier
-//    self.getGridPosition = function (point) {
-//        return new Point(Math.round((point.x / 2000) * 100), Math.round((point.y / 2000) * 100));
-//    };
-
-//    self.getPosition = function (point) {
-//        console.log(point);
-//        return new Point(point.x * 500, point.y * 500);
-//    };
-
 };

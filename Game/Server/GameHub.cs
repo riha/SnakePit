@@ -17,6 +17,11 @@ namespace SnakePit.Game.Server
             return Groups.Add(Context.ConnectionId, "foo");
         }
 
+        public void Setup(Point[] parts)
+        {
+            Clients["foo"].generateNewFood(CalculateFoodPosition(parts));
+        }
+
         public bool ValidateMove(Point[] parts)
         {
             if (IsBorderCollision(parts[0]))
@@ -34,11 +39,10 @@ namespace SnakePit.Game.Server
             return true;
         }
 
-        public Task CheckFoodCollision(Point part)
+        public void CheckFoodCollision(IList<Point> parts)
         {
-            return FoodStore.test["foo"] == part
-                ? Clients["foo"].foodCollision()
-                : Clients["foo"].noFood();
+            if(FoodStore.Food["foo"].Equals(parts[0]))
+                Clients["foo"].generateNewFood(CalculateFoodPosition(parts));
         }
 
         private bool IsBorderCollision(Point headPosition)
@@ -52,25 +56,29 @@ namespace SnakePit.Game.Server
         private static bool IsSelfCollision(IList<Point> parts)
         {
             var headPosition = parts[0];
-
-            return parts.Skip(1).Any(point => point.X == headPosition.X && point.Y == headPosition.Y);
+            
+            //We start on the third parts as the head can't collide with the first two parts
+            return parts.Skip(2).Any(point => point.X == headPosition.X && point.Y == headPosition.Y);
         }
 
-        public Task CalculateFoodPosition()
+        private static Point CalculateFoodPosition(ICollection<Point> parts)
         {
-            //TODO: Måste kontrollera att den inte skapas i ormen!
-            var r = new Random((int)DateTime.Now.Ticks);
-            var x = r.Next(0, 25);
-            var y = r.Next(0, 25);
-            var point = new Point(x, y);
-            //foods.Add("foo", point);
-            FoodStore.AddFood("foo", point);
-            return Clients["foo"].foodPosition(point);
-            //return null; // new Point((x * 490 / 20 * 20), (y * 490 / 20 * 20));
+            Point point;
+
+            do
+            {
+                var random = new Random((int)DateTime.Now.Ticks);
+                point = new Point(random.Next(0, 24), random.Next(0, 24));
+                
+            } while (parts.Contains(point)); //To make sure we don't generate food at the current position of any aprts of the snake
+
+            FoodStore.Food.AddOrUpdate("foo", point, (key, value) => point);
+
+            return point;
         }
 
         //    self.checkSelfCollision = function () {
-        //        //We start on the third parts as the head can't collide with the first two parts
+        //        
         //        for (var i = 3; i < parts.length - 1; i++) {
         //            var partPosition = parts[i];
         //            if (grid.getGridPosition(partPosition).equal(grid.getGridPosition(self.position))) {
