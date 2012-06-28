@@ -5,32 +5,33 @@
     var request;
     var degrees = 0;
 
-    var position = position;
+    self.remove = function () {
+        //console.log("Removing food!");
+        clear();
+        cancelRequestAnimFrame(request);
+    }
 
     function clear() {
-        //if (self.position != undefined) {
-        console.log("clear;");
+        //console.log("Clear food");
         context.save();
-        context.clearRect(0, 0, 500, 500);
-        //context.translate(self.position.x + thickness, self.position.y + thickness);
-        //context.clearRect(-9, -9, thickness * 2 + 3, thickness * 2 + 3);
+        context.translate(position.toFixed().x + thickness + 3, position.toFixed().y + thickness + 1);
+        context.clearRect(-9, -9, 20, 20);
         context.restore();
-        //};
     };
 
-    //    function spin() {
-    //        console.log("enter spin", lastDraw)
-    //        if (lastDraw == undefined || Date.now() - lastDraw > 50) {
-    //            //console.log("spin food 1");
-    //            degrees += 0.200;
-    //            clear();
-    //            draw(degrees);
-    //            //console.log("spin food 2");
-    //            lastDraw = Date.now();
-    //        };
+    function spin() {
+        //console.log("enter spin", lastDraw)
+        if (lastDraw == undefined || Date.now() - lastDraw > 80) {
+            //console.log("Draw rotated food");
+            degrees += 0.300;
+            clear();
+            draw(degrees);
+            //console.log("spin food 2");
+            lastDraw = Date.now();
+        };
 
-    //        request = requestAnimFrame(spin);
-    //    };
+        request = requestAnimFrame(spin);
+    };
 
     function draw(rotation) {
         if (rotation == undefined)
@@ -38,7 +39,7 @@
 
         context.save();
         context.translate(position.toFixed().x + thickness + 3, position.toFixed().y + thickness + 1);
-        //context.rotate(rotation);
+        context.rotate(rotation);
         context.fillStyle = "#000";
 
         context.shadowOffsetX = 2;
@@ -55,24 +56,5 @@
         context.restore();
     };
 
-    //    function calculatePosition() {
-    //        var position = new Point(Math.round(Math.random() * 490 / 20) * 20, Math.round(Math.random() * 490 / 20) * 20);
-    //        for (var i = 0; i < snake.parts.length - 1; i++) {
-    //            var part = snake.parts[i];
-    //            if (part.equal(position)) {
-    //                position = undefined;
-    //                break;
-    //            };
-    //        };
-
-    //        return position;
-    //    };
-
-    clear();
-
-    //    do {
-    //        self.position = calculatePosition();
-    //    } while (self.position == undefined);
-
-    draw();
+    spin();
 };

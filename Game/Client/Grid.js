@@ -1,6 +1,6 @@
 ﻿var Grid = function (context) {
     var self = this;
-    var shouldShowGrid = true;
+    var shouldShowGrid = false;
 
     self.maxWidth = maxWidth = 25;
     self.maxHeight = maxHeight = 25;

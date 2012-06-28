@@ -9,8 +9,8 @@ namespace SnakePit.Game.Server
 
     public class GameHub : Hub, IDisconnect
     {
-        private int maxWidth = 25; //TODO: should be set at init
-        private int maxHeight = 25; //TODO: should be set at init
+        private const int MaxWidth = 24; //TODO: should be set at init, skall också kallas Columns och Rows genomgående
+        private const int MaxHeight = 24; //TODO: should be set at init
 
         public Task Join()
         {
@@ -39,16 +39,21 @@ namespace SnakePit.Game.Server
             return true;
         }
 
-        public void CheckFoodCollision(IList<Point> parts)
+        public bool CheckFoodCollision(IList<Point> parts)
         {
-            if(FoodStore.Food["foo"].Equals(parts[0]))
+            if (FoodStore.Food["foo"].Equals(parts[0]))
+            {
                 Clients["foo"].generateNewFood(CalculateFoodPosition(parts));
+                return true;
+            }
+
+            return false;
         }
 
-        private bool IsBorderCollision(Point headPosition)
+        private static bool IsBorderCollision(Point headPosition)
         {
-            return headPosition.X >= maxWidth
-                   || headPosition.Y >= maxHeight
+            return headPosition.X == MaxWidth
+                   || headPosition.Y == MaxHeight
                    || headPosition.Y < 0
                    || headPosition.X < 0;
         }
@@ -76,19 +81,6 @@ namespace SnakePit.Game.Server
 
             return point;
         }
-
-        //    self.checkSelfCollision = function () {
-        //        
-        //        for (var i = 3; i < parts.length - 1; i++) {
-        //            var partPosition = parts[i];
-        //            if (grid.getGridPosition(partPosition).equal(grid.getGridPosition(self.position))) {
-        //                //console.log("crash");
-        //                return true;
-        //                break;
-        //            };
-        //        };
-        //        return false;
-        //    };
 
         public Task Disconnect()
         {

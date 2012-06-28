@@ -7,12 +7,14 @@
     self.parts = [startPoint];
 
     //Sets the initial parts and initial length of the snake.
-    setParts(14);
+    addParts(14);
 
-    function setParts(numberOfStartParts) {
+    function addParts(numberParts) {
+        console.log("Adding number of parts to snake", numberParts);
+
         var x = startPoint.x;
 
-        for (var i = 0; i < numberOfStartParts; i++) {
+        for (var i = 0; i < numberParts; i++) {
             x -= 1;
             self.parts.push(new Point(x, startPoint.y));
         };
@@ -24,17 +26,8 @@
     }
 
     self.grow = function () {
-        setParts(1);
+        addParts(1);
     }
-
-//    self.parts = function () {
-//        var relativeParts = [];
-//        for (var i = 0; i < parts.length; i++) {
-//            relativeParts.push(parts[i]);
-//        }
-
-//        return relativeParts;
-//    };
 
     function shouldDraw(lastRun) {
         if (lastDraw === undefined)
@@ -78,7 +71,8 @@
 
             context.restore();
             lastDraw = Date.now();
-            console.log("Draw snake at x:", self.currentHeadPoint.x, " y:", self.currentHeadPoint.y);
+
+            //console.log("Draw snake at x:", self.currentHeadPoint.x, " y:", self.currentHeadPoint.y);
 
             return true;
         };

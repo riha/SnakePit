@@ -1,5 +1,5 @@
 ﻿@{
-    ViewBag.Title = "Index";
+    ViewBag.Title = "Snake Pit deluxe";
 }
 @section Script {
     <script type="text/javascript">
@@ -29,20 +29,13 @@
                 gameOver();
             };
 
-
-            //            hub.noFood = function () {
-            //                //console.log("Moved ok");
-            //                gameContinue();
-            //            };
-
-//            hub.foodPosition = function (position) {
-//                
-//            };
-
             hub.generateNewFood = function (position) {
                 var point = new Point(position.X, position.Y)
                 console.log("Food consumed!");
                 console.log("Generating food at x:", point.x, " y:", point.y);
+                if (food != undefined)
+                    food.remove();
+
                 food = new Food(foodContext, point);
             };
 
@@ -67,7 +60,7 @@
             var grid = new Grid(gridContext);
 
             snake1 = new Snake(new Point(2, 2), snakeContext, grid);
-            
+
             hub.setup(snake1.parts);
 
             document.onkeydown = function (event) {
@@ -94,12 +87,18 @@
             if (snake1.draw(direction, lastRun)) {
                 lastDirection = direction;
 
-                hub.validateMove(snake1.parts).done(function (isValidMove) {
-                    if (isValidMove) {
-                        hub.checkFoodCollision(snake1.parts);
-                        request = requestAnimFrame(gameLoop);
-                    };
-                });
+                hub.validateMove(snake1.parts)
+                    .done(function (isValidMove) {
+                        if (isValidMove) {
+                            hub.checkFoodCollision(snake1.parts)
+                            .done(function (isFoodCollision) {
+                                if (isFoodCollision)
+                                    snake1.grow();
+                            });
+
+                            request = requestAnimFrame(gameLoop);
+                        };
+                    });
 
                 //Här måste vi skicka hela arrayen med positioner till servern. Den skall då kontrollera eventuella kollisioner
 
