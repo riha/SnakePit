@@ -1,7 +1,6 @@
 ﻿var Snake = function (startPoint, context, grid) {
     var self = this;
-
-    self.position = currentHeadPoint = startPoint;
+    var currentHeadPoint = startPoint;
 
     //Parts array contains all x, y positions for each part.
     //Initiates with the starting position of the snake head. 
@@ -14,14 +13,14 @@
         var x = startPoint.x;
 
         for (var i = 0; i < numberOfStartParts; i++) {
-            x -= 20;
+            x -= 1;
             parts.push(new Point(x, startPoint.y));
         };
     };
 
     function setPosition(direction) {
-        currentHeadPoint.x += direction.x * 20;
-        currentHeadPoint.y += direction.y * 20;
+        currentHeadPoint.x += direction.x * 1;
+        currentHeadPoint.y += direction.y * 1;
     }
 
     self.grow = function () {
@@ -31,10 +30,14 @@
     self.parts = function () {
         var relativeParts = [];
         for (var i = 0; i < parts.length; i++) {
-            relativeParts.push(grid.getGridPosition(parts[i]));
+            relativeParts.push(parts[i]);
         }
 
         return relativeParts;
+    };
+
+    self.headPart = function () {
+        return parts[0];
     };
 
     function shouldDraw(lastRun) {
@@ -58,7 +61,7 @@
             context.shadowOffsetX = 2;
             context.shadowOffsetY = 2;
             context.shadowColor = 'rgba(0, 0, 0, 0.2)';
-            
+
             //Loop the array from last part to first (first being the head). For each position we give it one "in front of it". 
             //The first one in the array (the head) we'll give the new caluclated position
             for (var i = parts.length - 1; i >= 0; i--) {
@@ -74,8 +77,8 @@
                 //console.log("part last", i, " ", parts[i]);
             };
 
-            context.clearRect(parts[parts.length - 1].x, parts[parts.length - 1].y, 20, 20);
-            roundRect(context, parts[0].x, parts[0].y, 18, 18, 7, true, false)
+            context.clearRect(parts[parts.length - 1].toFixed().x, parts[parts.length - 1].toFixed().y, 20, 20);
+            roundRect(context, parts[0].toFixed().x, parts[0].toFixed().y, 18, 18, 7, true, false)
 
             context.restore();
             lastDraw = Date.now();
