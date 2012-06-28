@@ -10,7 +10,7 @@ namespace SnakePit.Game.Server
     public class GameHub : Hub, IDisconnect
     {
         private const int MaxWidth = 24; //TODO: should be set at init, skall också kallas Columns och Rows genomgående
-        private const int MaxHeight = 24; //TODO: should be set at init
+        private const int MaxHeight = 24; //TODO: should be set at Setup call ...
 
         public Task Join()
         {
@@ -19,6 +19,10 @@ namespace SnakePit.Game.Server
 
         public void Setup(Point[] parts)
         {
+            int i;
+            Point p;
+            SharedCache.Scores.TryRemove("foo", out i);
+            SharedCache.FoodPositions.TryRemove("foo", out p);
             Clients["foo"].generateNewFood(CalculateFoodPosition(parts));
         }
 
@@ -41,9 +45,14 @@ namespace SnakePit.Game.Server
 
         public bool CheckFoodCollision(IList<Point> parts)
         {
-            if (FoodStore.Food["foo"].Equals(parts[0]))
+            if (SharedCache.FoodPositions["foo"].Equals(parts[0]))
             {
-                Clients["foo"].generateNewFood(CalculateFoodPosition(parts));
+                var point = CalculateFoodPosition(parts);
+                Clients["foo"].generateNewFood(point);
+
+                var score = SharedCache.Scores.AddOrUpdate("foo", 1, (key, oldScore) => oldScore + 1);
+                Clients["foo"].updateScore(score);
+
                 return true;
             }
 
@@ -61,7 +70,7 @@ namespace SnakePit.Game.Server
         private static bool IsSelfCollision(IList<Point> parts)
         {
             var headPosition = parts[0];
-            
+
             //We start on the third parts as the head can't collide with the first two parts
             return parts.Skip(2).Any(point => point.X == headPosition.X && point.Y == headPosition.Y);
         }
@@ -74,10 +83,10 @@ namespace SnakePit.Game.Server
             {
                 var random = new Random((int)DateTime.Now.Ticks);
                 point = new Point(random.Next(0, 24), random.Next(0, 24));
-                
+
             } while (parts.Contains(point)); //To make sure we don't generate food at the current position of any aprts of the snake
 
-            FoodStore.Food.AddOrUpdate("foo", point, (key, value) => point);
+            SharedCache.FoodPositions.AddOrUpdate("foo", point, (key, value) => point);
 
             return point;
         }

@@ -28,3 +28,9 @@ canvas#food
     width: 500px;
     height: 500px;
 }
+
+div#score
+{
+    margin-left: 20px;
+    font-size: 50px;
+}

@@ -24,6 +24,10 @@
                 gameOver();
             };
 
+            hub.updateScore = function (score) {
+                $("#score").text(score)
+            };
+
             hub.selfCollision = function () {
                 console.log("Collision with part");
                 gameOver();
@@ -31,8 +35,9 @@
 
             hub.generateNewFood = function (position) {
                 var point = new Point(position.X, position.Y)
-                console.log("Food consumed!");
+
                 console.log("Generating food at x:", point.x, " y:", point.y);
+
                 if (food != undefined)
                     food.remove();
 
@@ -47,12 +52,10 @@
         });
 
         function gameOver() {
-            //console.log(request);
             cancelRequestAnimFrame(request);
         };
 
         function gameContinue() {
-            //console.log(request);
             request = requestAnimFrame(gameLoop);
         };
 
@@ -99,20 +102,6 @@
                             request = requestAnimFrame(gameLoop);
                         };
                     });
-
-                //Här måste vi skicka hela arrayen med positioner till servern. Den skall då kontrollera eventuella kollisioner
-
-                //                    if (snake1.checkSelfCollision() || snake1.checkBorderCollision()) {
-                //                        gameOver();
-                //                    } else {
-                //                        if (snake1.checkFoodCollision(food)) {
-                //                            snake1.grow();
-                //                            //food.clear();
-                //                            food = new Food(foodContext, snake1);
-                //                        }
-
-
-                //}
             } else {
                 request = requestAnimFrame(gameLoop);
             }
@@ -121,10 +110,14 @@
     </script>
 }
 <h2>
-    Index</h2>
-<canvas id="snake" width="500" height="500">
-</canvas>
-<canvas id="food" width="500" height="500">
-</canvas>
-<canvas id="grid" width="500" height="500">
-</canvas>
+    Snake Pit Delux</h2>
+<div style="float: left;width:500px;border:1px solid red;">
+    <canvas id="snake" width="500" height="500">
+    </canvas>
+    <canvas id="food" width="500" height="500">
+    </canvas>
+    <canvas id="grid" width="500" height="500">
+    </canvas>
+</div>
+<div style="float: left;" id="score">
+    0</div>
