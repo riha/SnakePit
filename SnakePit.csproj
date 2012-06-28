@@ -76,6 +76,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Controllers\HomeController.cs" />
+    <Compile Include="Game\Server\FoodStore.cs" />
     <Compile Include="Game\Server\Point.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
@@ -86,6 +87,7 @@
   <ItemGroup>
     <Content Include="Css\Main.css" />
     <Content Include="Game\Client\Directions.js" />
+    <Content Include="Game\Client\Food.js" />
     <Content Include="Game\Client\Grid.js" />
     <Content Include="Game\Client\Point.js" />
     <Content Include="Game\Client\RoundRect.js" />

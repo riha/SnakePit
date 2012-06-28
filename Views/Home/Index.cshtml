@@ -8,8 +8,14 @@
         var snake1;
         var direction = Directions.Right;
         var lastDirection;
+        var food;
+        var snakeContex, gridContext, foodContext;
 
         $(function () {
+            snakeContext = $("#snake").get(0).getContext('2d');
+            gridContext = $("#grid").get(0).getContext('2d');
+            foodContext = $("#food").get(0).getContext('2d');
+
             hub = $.connection.gameHub;
             console.log(hub);
 
@@ -23,10 +29,27 @@
                 gameOver();
             };
 
+            //            //TODO måste all ha denna!?
+            //            hub.validMove = function () {
+            //                console.log("Moved ok");
+            //                hub.checkFoodCollision(snake1.headPart());
+            //            };
 
-            hub.ok = function () {
-                console.log("Moved ok");
-                ok();
+//            hub.noFood = function () {
+//                //console.log("Moved ok");
+//                gameContinue();
+//            };
+
+            hub.foodPosition = function (position) {
+                //console.log(request);
+                console.log("new food!", position);
+                food = new Food(foodContext, new Point(position.X, position.Y));
+            };
+
+            hub.foodCollision = function () {
+                console.log("Food collision!");
+                hub.calculateFoodPosition();
+                gameOver();
             };
 
             $.connection.hub.start(function () {
@@ -41,13 +64,13 @@
             cancelRequestAnimFrame(request);
         };
 
-        function ok() {
+        function gameContinue() {
             //console.log(request);
             request = requestAnimFrame(gameLoop);
         };
 
         function init() {
-            
+
             //            document.onkeydown = function (evt) {
             //                evt = evt || window.event;
             //                console.log(evt.keyCode);
@@ -69,16 +92,14 @@
                 };
             };
 
-            var snakeContext = $("#snake").get(0).getContext('2d');
-            var gridContext = $("#grid").get(0).getContext('2d');
-
             var grid = new Grid(gridContext);
 
-            snake1 = new Snake(new Point(100, 40), snakeContext, grid);
+            snake1 = new Snake(new Point(2, 2), snakeContext, grid);
+
+            hub.calculateFoodPosition();
 
             gameLoop();
         }
-
 
         function gameLoop() {
             lastRun = Date.now();
@@ -86,7 +107,13 @@
             //TODO: Start by calculating new position, then do all test - if everythings ok draw the new position
             if (snake1.draw(direction, lastRun)) {
                 lastDirection = direction;
-                hub.validateMove(snake1.parts());
+
+                hub.validateMove(snake1.parts()).done(function (isValidMove) {
+                    console.log(isValidMove)
+                    if (isValidMove)
+                        request = requestAnimFrame(gameLoop);
+                });
+
                 //Här måste vi skicka hela arrayen med positioner till servern. Den skall då kontrollera eventuella kollisioner
 
                 //                    if (snake1.checkSelfCollision() || snake1.checkBorderCollision()) {
