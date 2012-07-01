@@ -1,7 +1,7 @@
 ﻿var Food = function (context, position) {
     var self = this;
     var thickness = 8;
-    var lastDraw = undefined;
+    var lastDraw;
     var request;
     var degrees = 0;
 
@@ -9,33 +9,33 @@
         //console.log("Removing food!");
         clear();
         cancelRequestAnimFrame(request);
-    }
+    };
 
     function clear() {
-        //console.log("Clear food");
         context.save();
         context.translate(position.toFixed().x + thickness + 3, position.toFixed().y + thickness + 1);
         context.clearRect(-9, -9, 20, 20);
         context.restore();
-    };
+    }
 
     function spin() {
         //console.log("enter spin", lastDraw)
-        if (lastDraw == undefined || Date.now() - lastDraw > 80) {
+        if (lastDraw === undefined || Date.now() - lastDraw > 80) {
             //console.log("Draw rotated food");
             degrees += 0.300;
             clear();
             draw(degrees);
             //console.log("spin food 2");
             lastDraw = Date.now();
-        };
+        }
 
         request = requestAnimFrame(spin);
-    };
+    }
 
     function draw(rotation) {
-        if (rotation == undefined)
+        if (rotation === undefined) {
             rotation = 0;
+        }
 
         context.save();
         context.translate(position.toFixed().x + thickness + 3, position.toFixed().y + thickness + 1);
@@ -54,7 +54,7 @@
         context.strokeStyle = "#000";
         roundRect(context, -2.5, -2.5, 5, 5, 2, true, false);
         context.restore();
-    };
+    }
 
     spin();
 };

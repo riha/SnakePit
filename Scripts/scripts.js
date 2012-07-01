@@ -1858,8 +1858,8 @@ if(e){a.stroke()
 }if(b){a.fill()
 }}var Grid=function(a){var b=this;
 var c=false;
-b.maxWidth=maxWidth=25;
-b.maxHeight=maxHeight=25;
+b.maxWidth=25;
+b.maxHeight=25;
 a.save();
 a.beginPath();
 a.moveTo(100,0);
@@ -1873,12 +1873,12 @@ a.restore();
 if(c){a.save();
 a.strokeStyle="#ccc";
 for(var e=0;
-e<=maxWidth;
+e<=b.maxWidth;
 e++){a.moveTo(e*20,0);
 a.lineTo(e*20,a.canvas.height);
 a.stroke()
 }for(var d=0;
-d<=maxHeight;
+d<=b.maxHeight;
 d++){a.moveTo(0,d*20);
 a.lineTo(a.canvas.width,d*20);
 a.stroke()
@@ -1886,7 +1886,7 @@ a.stroke()
 }};
 var Food=function(b,f){var h=this;
 var j=8;
-var e=undefined;
+var e;
 var g;
 var c=0;
 h.remove=function(){a();
@@ -1896,12 +1896,12 @@ function a(){b.save();
 b.translate(f.toFixed().x+j+3,f.toFixed().y+j+1);
 b.clearRect(-9,-9,20,20);
 b.restore()
-}function i(){if(e==undefined||Date.now()-e>80){c+=0.3;
+}function i(){if(e===undefined||Date.now()-e>80){c+=0.3;
 a();
 d(c);
 e=Date.now()
 }g=requestAnimFrame(i)
-}function d(k){if(k==undefined){k=0
+}function d(k){if(k===undefined){k=0
 }b.save();
 b.translate(f.toFixed().x+j+3,f.toFixed().y+j+1);
 b.rotate(k);
@@ -1939,7 +1939,7 @@ e.currentHeadPoint.y+=i.y*1
 };
 function g(i){if(d===undefined){return true
 }return(i-d>80)
-}var d=undefined;
+}var d;
 e.draw=function(j,l){if(d===undefined){d=l
 }if(g(l)){b.save();
 b.fillStyle="#000";
@@ -1948,7 +1948,7 @@ b.shadowOffsetY=2;
 b.shadowColor="rgba(0, 0, 0, 0.2)";
 for(var k=e.parts.length-1;
 k>=0;
-k--){if(k==0){f(j);
+k--){if(k===0){f(j);
 e.parts[k]=new Point(e.currentHeadPoint.x,e.currentHeadPoint.y)
 }else{e.parts[k]=new Point(e.parts[k-1].x,e.parts[k-1].y)
 }}b.clearRect(e.parts[e.parts.length-1].toFixed().x,e.parts[e.parts.length-1].toFixed().y,20,20);

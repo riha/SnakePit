@@ -2,8 +2,8 @@
     var self = this;
     var shouldShowGrid = false;
 
-    self.maxWidth = maxWidth = 25;
-    self.maxHeight = maxHeight = 25;
+    self.maxWidth = 25;
+    self.maxHeight = 25;
 
     context.save();
     context.beginPath();
@@ -20,12 +20,12 @@
         context.save();
         context.strokeStyle = "#ccc";
 
-        for (var y = 0; y <= maxWidth; y++) {
+        for (var y = 0; y <= self.maxWidth; y++) {
             context.moveTo(y * 20, 0);
             context.lineTo(y * 20, context.canvas.height);
             context.stroke();
         }
-        for (var x = 0; x <= maxHeight; x++) {
+        for (var x = 0; x <= self.maxHeight; x++) {
             context.moveTo(0, x * 20);
             context.lineTo(context.canvas.width, x * 20);
             context.stroke();
