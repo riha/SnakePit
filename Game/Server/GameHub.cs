@@ -61,8 +61,8 @@ namespace SnakePit.Game.Server
 
         private static bool IsBorderCollision(Point headPosition)
         {
-            return headPosition.X == MaxWidth
-                   || headPosition.Y == MaxHeight
+            return headPosition.X > MaxWidth
+                   || headPosition.Y > MaxHeight
                    || headPosition.Y < 0
                    || headPosition.X < 0;
         }
